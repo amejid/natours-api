@@ -109,6 +109,8 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
@@ -119,13 +121,13 @@ tourSchema.virtual('reviews', {
   localField: '_id',
 });
 
-tourSchema.pre('/^find/', function (next) {
+tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
 
   next();
 });
 
-tourSchema.pre('/^find/', function (next) {
+tourSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',
     select: '-__v -passwordChangedAt',
