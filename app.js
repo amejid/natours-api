@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -12,6 +13,8 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
+
+app.use(cors());
 
 const limiter = rateLimit({
   max: 100,

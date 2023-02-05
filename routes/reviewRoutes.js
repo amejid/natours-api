@@ -12,12 +12,11 @@ const {
 
 const router = express.Router({ mergeParams: true });
 
+router.get('/', getAllReviews);
+
 router.use(protect);
 
-router
-  .route('/')
-  .get(getAllReviews)
-  .post(restrictTo('user'), setTourUserIds, createReview);
+router.post('/', restrictTo('user'), setTourUserIds, createReview);
 
 router
   .route('/:id')
