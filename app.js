@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -14,7 +15,12 @@ const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
 
-app.use(cors());
+const corsConfig = {
+  credentials: true,
+  origin: true,
+};
+
+app.use(cors(corsConfig));
 
 const limiter = rateLimit({
   max: 100,
@@ -26,6 +32,7 @@ app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 app.use('/api', limiter);
 
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 app.use(mongoSanitize());
 
