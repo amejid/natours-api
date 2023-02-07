@@ -1,3 +1,4 @@
+const fs = require('fs');
 const multer = require('multer');
 const sharp = require('sharp');
 const User = require('../models/userModel');
@@ -60,7 +61,12 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
 
   const filteredBody = filterObj(req.body, 'name', 'email');
-  if (req.file) filteredBody.photo = req.file.filename;
+  if (req.file) {
+    if (fs.existsSync(`public/img/users/${req.user.photo}`)) {
+      fs.unlinkSync(`public/img/users/${req.user.photo}`);
+    }
+    filteredBody.photo = req.file.filename;
+  }
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
